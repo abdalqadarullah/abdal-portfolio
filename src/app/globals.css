@@ -1,0 +1,403 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================================================
+   ABDAL — Neo-Brutalist Theme
+   Palette: black #0A0A0A · white #FAFAFA · accent #D4FF00 (neon yellow)
+   Fonts:   Anton (heading, UPPERCASE) · Roboto (body)
+   Style:   hard edges (no rounded), high contrast, thin divider lines
+   ============================================================ */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-roboto);
+  --font-heading: var(--font-anton);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  /* Brutalist: no rounded corners anywhere */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+}
+
+:root {
+  /* ABDAL brand palette */
+  --abdal-black: #0A0A0A;
+  --abdal-white: #FAFAFA;
+  --abdal-accent: #D4FF00;
+  --abdal-muted: #6B6B6B;
+  --abdal-border-dark: #2A2A2A;
+  --abdal-border-light: #D4D4D4;
+
+  /* shadcn token overrides — single fixed light theme (no dark toggle) */
+  --radius: 0px;
+  --background: #FAFAFA;
+  --foreground: #0A0A0A;
+  --card: #FAFAFA;
+  --card-foreground: #0A0A0A;
+  --popover: #0A0A0A;
+  --popover-foreground: #FAFAFA;
+  --primary: #0A0A0A;
+  --primary-foreground: #FAFAFA;
+  --secondary: #F0F0F0;
+  --secondary-foreground: #0A0A0A;
+  --muted: #F0F0F0;
+  --muted-foreground: #6B6B6B;
+  --accent: #D4FF00;
+  --accent-foreground: #0A0A0A;
+  --destructive: #E5484D;
+  --border: #0A0A0A;
+  --input: #0A0A0A;
+  --ring: #D4FF00;
+  --chart-1: #D4FF00;
+  --chart-2: #0A0A0A;
+  --chart-3: #6B6B6B;
+  --chart-4: #2A2A2A;
+  --chart-5: #FAFAFA;
+  --sidebar: #0A0A0A;
+  --sidebar-foreground: #FAFAFA;
+  --sidebar-primary: #D4FF00;
+  --sidebar-primary-foreground: #0A0A0A;
+  --sidebar-accent: #1A1A1A;
+  --sidebar-accent-foreground: #FAFAFA;
+  --sidebar-border: #2A2A2A;
+  --sidebar-ring: #D4FF00;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    border-radius: 0 !important;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-roboto), system-ui, sans-serif;
+    background-color: var(--abdal-white);
+    color: var(--abdal-black);
+  }
+  ::selection {
+    background: var(--abdal-accent);
+    color: var(--abdal-black);
+  }
+}
+
+/* ============================================================
+   Custom Scrollbar — neon yellow on black, hard edge
+   ============================================================ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--abdal-black);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--abdal-accent);
+  border-radius: 0;
+  border: 2px solid var(--abdal-black);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #B8E000;
+}
+* {
+  scrollbar-color: var(--abdal-accent) var(--abdal-black);
+  scrollbar-width: thin;
+}
+
+/* ============================================================
+   Brutalist utility classes
+   ============================================================ */
+.font-heading {
+  font-family: var(--font-anton), system-ui, sans-serif;
+  font-weight: 400; /* Anton only has one weight */
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  line-height: 0.9;
+}
+.font-body {
+  font-family: var(--font-roboto), system-ui, sans-serif;
+}
+
+/* Brutalist section rhythm — alternating black/white backgrounds */
+.section-dark {
+  background-color: var(--abdal-black);
+  color: var(--abdal-white);
+}
+.section-light {
+  background-color: var(--abdal-white);
+  color: var(--abdal-black);
+}
+
+/* Thin divider line between columns (brutalist) */
+.divide-brutal > * + * {
+  border-left: 1px solid var(--abdal-border-dark);
+}
+.section-light .divide-brutal > * + * {
+  border-left-color: var(--abdal-border-light);
+}
+@media (max-width: 768px) {
+  .divide-brutal > * + * {
+    border-left: none;
+    border-top: 1px solid var(--abdal-border-dark);
+  }
+  .section-light .divide-brutal > * + * {
+    border-top-color: var(--abdal-border-light);
+  }
+}
+
+/* Brutalist hard shadow (used sparingly) */
+.shadow-brutal {
+  box-shadow: 6px 6px 0 0 var(--abdal-black);
+}
+.shadow-brutal-accent {
+  box-shadow: 6px 6px 0 0 var(--abdal-accent);
+}
+
+/* LIVE dot pulse animation (visitor widget — visual only, no polling) */
+@keyframes abdal-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+.live-dot {
+  animation: abdal-pulse 1.6s ease-in-out infinite;
+}
+
+/* Skeleton shimmer (visitor widget loading state) */
+@keyframes abdal-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton-brutal {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(212, 255, 0, 0.15) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: abdal-shimmer 1.4s linear infinite;
+}
+
+/* Container */
+.container-brutal {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+@media (min-width: 768px) {
+  .container-brutal {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .container-brutal {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+/* ============================================================
+   Restyled shadcn Checkbox (brutalist consent checkbox)
+   — Square hard-edge box, yellow fill + black check when checked
+   ============================================================ */
+[data-slot="checkbox"] {
+  border-radius: 0 !important;
+  border: 2px solid var(--abdal-black) !important;
+  background: transparent !important;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+}
+[data-slot="checkbox"][data-state="checked"] {
+  background: var(--abdal-accent) !important;
+  border-color: var(--abdal-black) !important;
+  color: var(--abdal-black) !important;
+}
+[data-slot="checkbox"]:focus-visible {
+  outline: 2px solid var(--abdal-accent);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   Restyled shadcn Dropdown (brutalist mobile menu / future filters)
+   — Black bg, hard border, yellow hover
+   ============================================================ */
+[data-slot="dropdown-menu-content"] {
+  border-radius: 0 !important;
+  background: var(--abdal-black) !important;
+  color: var(--abdal-white) !important;
+  border: 2px solid var(--abdal-accent) !important;
+  box-shadow: 6px 6px 0 0 var(--abdal-accent) !important;
+}
+[data-slot="dropdown-menu-item"] {
+  border-radius: 0 !important;
+  color: var(--abdal-white) !important;
+  font-family: var(--font-roboto);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
+}
+[data-slot="dropdown-menu-item"]:hover,
+[data-slot="dropdown-menu-item"][data-highlighted] {
+  background: var(--abdal-accent) !important;
+  color: var(--abdal-black) !important;
+}
+
+/* ============================================================
+   Form inputs — brutalist style (used in CTA contact form)
+   ============================================================ */
+.input-brutal {
+  width: 100%;
+  background: transparent;
+  border: 2px solid var(--abdal-black);
+  color: var(--abdal-black);
+  padding: 0.875rem 1rem;
+  font-family: var(--font-roboto);
+  font-size: 0.95rem;
+  border-radius: 0;
+  outline: none;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.input-brutal::placeholder {
+  color: var(--abdal-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+}
+.input-brutal:focus {
+  box-shadow: 4px 4px 0 0 var(--abdal-accent);
+  transform: translate(-2px, -2px);
+}
+/* On dark backgrounds (CTA section), invert */
+.section-dark .input-brutal {
+  border-color: var(--abdal-white);
+  color: var(--abdal-white);
+  background: transparent;
+}
+.section-dark .input-brutal::placeholder {
+  color: rgba(250, 250, 250, 0.5);
+}
+.section-dark .input-brutal:focus {
+  box-shadow: 4px 4px 0 0 var(--abdal-accent);
+}
+
+/* Button — brutalist primary (black on light, white on dark, yellow hover) */
+.btn-brutal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  font-family: var(--font-roboto);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.875rem;
+  border: 2px solid var(--abdal-black);
+  background: var(--abdal-black);
+  color: var(--abdal-white);
+  border-radius: 0;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+.btn-brutal:hover {
+  background: var(--abdal-accent);
+  color: var(--abdal-black);
+  border-color: var(--abdal-black);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 0 var(--abdal-black);
+}
+.btn-brutal:active {
+  transform: translate(0, 0);
+  box-shadow: 0 0 0 0 var(--abdal-black);
+}
+.btn-brutal:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+/* Accent variant — yellow bg by default */
+.btn-brutal-accent {
+  background: var(--abdal-accent);
+  color: var(--abdal-black);
+  border-color: var(--abdal-black);
+}
+.btn-brutal-accent:hover {
+  background: var(--abdal-black);
+  color: var(--abdal-accent);
+  border-color: var(--abdal-accent);
+  box-shadow: 4px 4px 0 0 var(--abdal-accent);
+}
+/* On dark section, outline variant uses white border */
+.section-dark .btn-brutal {
+  border-color: var(--abdal-white);
+  background: var(--abdal-white);
+  color: var(--abdal-black);
+}
+.section-dark .btn-brutal:hover {
+  background: var(--abdal-accent);
+  color: var(--abdal-black);
+  border-color: var(--abdal-accent);
+  box-shadow: 4px 4px 0 0 var(--abdal-accent);
+}
+
+/* Pill / tag for skills */
+.tag-brutal {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  border: 1.5px solid currentColor;
+  border-radius: 0;
+  font-family: var(--font-roboto);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* Sticky footer helper */
+.min-h-screen-flex {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

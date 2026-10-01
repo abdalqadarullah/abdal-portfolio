@@ -1,0 +1,21 @@
+// ABDAL Portfolio — Prisma schema
+// Only the Visitor model is used for the visitor counter feature.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Visitor {
+  id          String   @id @default(cuid())
+  ipHash      String   @unique // SHA-256 hash of the visitor IP (never store raw IP)
+  countryCode String   // ISO 3166-1 alpha-2 code, e.g. "ID", "US", or "XX" for unknown
+  countryName String   // Human-readable country name, e.g. "Indonesia" or "Unknown"
+  visitedAt   DateTime @default(now())
+
+  @@index([countryCode])
+}
