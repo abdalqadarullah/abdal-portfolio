@@ -1,5 +1,7 @@
 # ABDAL Portfolio
 
+---
+
 Neo-brutalist one-page portfolio website for Abdal, a UI/UX and brand designer.
 
 The project is built with Next.js App Router, React, Tailwind CSS, Framer Motion, Lenis, Lucide, EmailJS, and Prisma. Portfolio content is centralized in `src/data/content.ts` so text, projects, contact details, and social links can be updated from one place.
