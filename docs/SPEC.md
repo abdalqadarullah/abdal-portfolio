@@ -177,7 +177,7 @@ copyright kecil (`© 2026 Abdal. All rights reserved.`)
 ```prisma
 // prisma/schema.prisma
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -242,6 +242,10 @@ model Visitor {
   portofolio personal; tidak perlu caching tambahan di MVP.
 
 ### 11.4 Komponen `VisitorWidget.tsx`
+
+Runtime behavior: the widget records the current visitor once with `POST`, then
+refreshes aggregate data with `GET /api/visitor` every 60 seconds. The LIVE badge
+indicates that this refresh loop is active.
 
 - `"use client"`, `useEffect` melakukan `POST /api/visitor` sekali saat mount,
   lalu `GET /api/visitor` setiap 60 detik untuk refresh agregat tanpa re-trigger
