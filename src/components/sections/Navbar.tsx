@@ -20,6 +20,7 @@ const MENU_IDS = nav.menu.map((m) => m.href);
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -27,6 +28,37 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Hide the navbar while scrolling down and reveal it while scrolling up.
+  // Keep it visible near the top and whenever the mobile menu is open.
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    let frameId = 0;
+
+    const onScroll = () => {
+      if (frameId) return;
+
+      frameId = requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+        const scrollDelta = currentScrollY - lastScrollY;
+
+        if (currentScrollY <= 24 || scrollDelta < -4) {
+          setHidden(false);
+        } else if (scrollDelta > 4 && !open) {
+          setHidden(true);
+        }
+
+        lastScrollY = currentScrollY;
+        frameId = 0;
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frameId);
+    };
+  }, [open]);
 
   // Lock body scroll when mobile overlay is open
   useEffect(() => {
@@ -39,6 +71,7 @@ export function Navbar() {
   const handleNavClick = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
     setOpen(false);
+    setHidden(false);
     // Small timeout so the overlay finishes closing first
     setTimeout(() => smoothScrollTo(href), open ? 200 : 0);
   };
@@ -46,7 +79,9 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`sticky top-0 z-40 w-full transition-colors duration-300 ${
+        className={`sticky top-0 z-40 w-full transform transition-[transform,background-color,border-color] duration-300 ${
+          hidden && !open ? "-translate-y-full" : "translate-y-0"
+        } ${
           scrolled
             ? "bg-[#0A0A0A] text-[#FAFAFA] border-b border-[#2A2A2A]"
             : "bg-[#0A0A0A]/95 backdrop-blur-sm text-[#FAFAFA] border-b border-transparent"
