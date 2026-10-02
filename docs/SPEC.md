@@ -243,8 +243,9 @@ model Visitor {
 
 ### 11.4 Komponen `VisitorWidget.tsx`
 
-- `"use client"`, `useEffect(() => { fetch POST /api/visitor }, [])` (run sekali
-  saat mount, dependency array kosong).
+- `"use client"`, `useEffect` melakukan `POST /api/visitor` sekali saat mount,
+  lalu `GET /api/visitor` setiap 60 detik untuk refresh agregat tanpa re-trigger
+  pencatatan visitor.
 - State: `loading`, `data` (`{ total, countries }`), `error`.
 - Loading state: skeleton sederhana (kotak abu-abu pulsing) agar footer tidak
   "melompat" saat data masuk.

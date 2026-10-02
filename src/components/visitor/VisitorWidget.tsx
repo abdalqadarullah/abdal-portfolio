@@ -5,18 +5,21 @@ import { AnimatedWrapper } from "@/components/shared/AnimatedWrapper";
 import { footer } from "@/data/content";
 
 /**
- * VisitorWidget — fetches visitor stats once on mount and renders a small
+ * VisitorWidget — records the current visitor on mount and refreshes stats
+ * periodically while rendering a small
  * dashboard-style block in footer column 4.
  *
  * Behavior:
  * - POST /api/visitor once on mount (records this visit + returns aggregate).
- * - LIVE dot is visual-only (CSS pulse), NOT real-time polling.
+ * - GET /api/visitor every 60 seconds (refreshes aggregate without recounting).
+ * - LIVE dot indicates that the widget is actively refreshing its data.
  * - Loading: skeleton shimmer blocks.
  * - Error / no data: graceful "—" so footer layout never breaks.
  */
 
 type Country = { code: string; name: string; count: number };
 type VisitorData = { total: number; countries: Country[] };
+const REFRESH_INTERVAL_MS = 60_000;
 
 export function VisitorWidget() {
   const [data, setData] = useState<VisitorData | null>(null);
@@ -24,11 +27,12 @@ export function VisitorWidget() {
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+    const fetchVisitorData = async (method: "POST" | "GET") => {
       try {
         const res = await fetch("/api/visitor", {
-          method: "POST",
+          method,
           headers: { "Content-Type": "application/json" },
+          cache: "no-store",
         });
         if (!res.ok) throw new Error("fetch-failed");
         const json = (await res.json()) as VisitorData;
@@ -37,14 +41,22 @@ export function VisitorWidget() {
           setLoading(false);
         }
       } catch {
-        if (!cancelled) {
+        // Keep the last successful result during refresh failures.
+        if (!cancelled && method === "POST") {
           setData(null);
           setLoading(false);
         }
       }
-    })();
+    };
+
+    void fetchVisitorData("POST");
+    const intervalId = window.setInterval(() => {
+      void fetchVisitorData("GET");
+    }, REFRESH_INTERVAL_MS);
+
     return () => {
       cancelled = true;
+      window.clearInterval(intervalId);
     };
   }, []);
 

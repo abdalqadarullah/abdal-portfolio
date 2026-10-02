@@ -6,7 +6,7 @@
 |---|---|
 | Frontend framework | React + **Next.js 14+ (App Router)** |
 | Backend | **Next.js API Routes** (Route Handlers) |
-| Database / ORM | **Prisma** — SQLite untuk development |
+| Database / ORM | **Prisma** — PostgreSQL untuk development dan production |
 | Component library | **shadcn/ui** (berbasis Radix UI) |
 | Icon | **lucide-react** |
 | Animasi | **Framer Motion** (entrance/exit transitions) |
@@ -16,9 +16,9 @@
 | Form kontak | **EmailJS** (client-side, `@emailjs/browser`) |
 | Geolocation IP | **ip-api.com** (free tier, no API key) |
 
-> **Catatan deployment**: SQLite tidak cocok untuk environment serverless (Vercel).
-> Untuk production, ganti `DATABASE_URL` Prisma ke PostgreSQL (mis. Neon atau
-> Supabase) — schema tidak perlu berubah, cukup provider di `schema.prisma`.
+> **Catatan deployment**: gunakan PostgreSQL persistent (mis. Neon atau Supabase)
+> untuk development dan production. SQLite lokal tidak digunakan karena tidak
+> cocok untuk penyimpanan visitor pada environment serverless seperti Vercel.
 
 ## Struktur Folder
 
@@ -26,7 +26,7 @@
 abdal-portfolio/
 ├── prisma/
 │   ├── schema.prisma          # Model Visitor
-│   └── dev.db                 # SQLite (development)
+│   └── (database production berada di PostgreSQL)
 ├── public/
 │   └── placeholders/          # semua gambar placeholder (hero, proyek, foto profil)
 ├── src/
@@ -84,7 +84,8 @@ VisitorWidget.tsx (Client Component, "use client")
       → prisma.visitor.upsert({ where: { ipHash }, ... })
       → query agregat: total unique + groupBy countryCode (top 5)
       → return JSON { total, countries: [...] }
-  → widget render: total + bar chart + badge LIVE (visual only, no polling)
+  → widget render: total + bar chart + badge LIVE
+  → GET /api/visitor setiap 60 detik untuk memperbarui agregat tanpa menghitung ulang visitor
 ```
 
 ### Form Kontak
@@ -108,7 +109,7 @@ CTA.tsx (Client Component)
 ## Environment Variables
 
 ```
-DATABASE_URL="file:./dev.db"          # ganti ke postgres:// saat production
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require"
 NEXT_PUBLIC_EMAILJS_SERVICE_ID=
 NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=
 NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=

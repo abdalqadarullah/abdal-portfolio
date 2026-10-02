@@ -21,8 +21,7 @@ The project is built with Next.js App Router, React, Tailwind CSS, Framer Motion
 
 - Node.js 20+ or Bun
 - Git
-- SQLite for local development
-- PostgreSQL or another persistent database for production deployment
+- PostgreSQL database for local development and production deployment
 
 ## Local setup
 
@@ -41,7 +40,7 @@ cp .env.example .env
 Set the database URL and, if the contact form is needed, add the EmailJS values:
 
 ```env
-DATABASE_URL="file:./dev.db"
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/DATABASE?sslmode=require"
 NEXT_PUBLIC_EMAILJS_SERVICE_ID=""
 NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=""
 NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=""
@@ -76,9 +75,9 @@ public/                Static public assets
 
 ## Visitor counter
 
-`POST /api/visitor` hashes the client IP with SHA-256, performs a country lookup through `ip-api.com`, stores a unique visitor in Prisma, and returns aggregate country statistics. Raw IP addresses are not stored.
+`POST /api/visitor` hashes the client IP with SHA-256, performs a country lookup through `ip-api.com`, stores a unique visitor in Prisma, and returns aggregate country statistics. Raw IP addresses are not stored. The footer widget then refreshes the aggregate through `GET /api/visitor` every 60 seconds without counting the visitor again.
 
-For production, use a persistent PostgreSQL database and configure `DATABASE_URL` through the deployment platform. Do not commit `.env` files or local database files.
+Configure `DATABASE_URL` with a persistent PostgreSQL connection string through the deployment platform. Do not commit `.env` files or local database files.
 
 ## Production build
 
