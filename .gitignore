@@ -20,6 +20,12 @@ node_modules
 # production
 /build
 
+# local databases
+db/*.db
+db/*.db-journal
+db/*.db-shm
+db/*.db-wal
+
 # misc
 .DS_Store
 *.pem
