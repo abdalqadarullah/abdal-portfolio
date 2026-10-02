@@ -79,7 +79,7 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`sticky top-0 z-40 w-full transform transition-[transform,background-color,border-color] duration-300 ${
+        className={`navbar-auto-hide sticky top-0 z-40 w-full transform ${
           hidden && !open ? "-translate-y-full" : "translate-y-0"
         } ${
           scrolled

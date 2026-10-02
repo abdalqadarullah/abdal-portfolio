@@ -401,3 +401,12 @@
   display: flex;
   flex-direction: column;
 }
+
+/* Smooth auto-hide transition for the sticky navbar */
+.navbar-auto-hide {
+  transition:
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 300ms ease,
+    border-color 300ms ease;
+  will-change: transform;
+}
